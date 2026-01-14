@@ -1,0 +1,614 @@
+/* ===============================
+   VARIABLES — COULEURS DU CŒUR
+   =============================== */
+:root {
+    --bg-main: #F6EFE7;
+    /* beige chaud */
+    --bg-card: #FFFFFF;
+    --text-main: #4A3A2A;
+    /* brun doux */
+    --text-soft: #7A5C48;
+    --accent-green: #8FA998;
+    /* vert sauge */
+    --accent-heart: #C97C5D;
+    /* terracotta */
+    --border-soft: #E6D8CC;
+    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* ===============================
+   RESET / BASE
+   =============================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 0;
+    font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-main);
+    color: var(--text-main);
+    line-height: 1.6;
+
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+}
+
+/* ===============================
+   HEADER
+   =============================== */
+header {
+    background: linear-gradient(135deg, #EADBC8, #F6EFE7);
+    padding: 25px 20px;
+    text-align: center;
+    box-shadow: var(--shadow-soft);
+}
+
+header h1 {
+    margin: 0 0 15px;
+    font-family: "Playfair Display", serif;
+    font-size: 2.2rem;
+    color: var(--text-main);
+
+}
+
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 32px 28px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.container h2 {
+    font-size: 30px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #2f2f2f;
+}
+
+.container a {
+    display: inline-block;
+    margin: 16px 0 24px;
+    padding: 10px 18px;
+    background: #1b4332;
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.container a:hover {
+    background: #163b2a;
+}
+
+.container p {
+    color: #666;
+    font-size: 15px;
+    margin-top: 10px;
+}
+
+.container p::before {
+    content: "🐾 ";
+}
+
+
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+nav a {
+    text-decoration: none;
+    color: var(--text-soft);
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+nav a:hover {
+    background: var(--accent-green);
+    color: white;
+}
+
+/* ===============================
+   CONTENU GÉNÉRAL
+   =============================== */
+h1,
+h2,
+h3 {
+    font-family: "Playfair Display", serif;
+    color: var(--text-main);
+    text-align: justify;
+
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 10px;
+    /* կամ 8px */
+}
+
+p {
+    max-width: 600px;
+    margin: 10px auto;
+    padding: 0 10px;
+    font-size: 1.05rem;
+}
+
+.auth-wrapper {
+    min-height: 60vh;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+
+.auth-wrapper h2 {
+    margin-bottom: 6px;
+}
+
+.auth-wrapper form {
+    margin-top: 0;
+}
+
+/* ===============================
+   CARTES
+   =============================== */
+.card {
+    background: var(--bg-card);
+    border-radius: 18px;
+    box-shadow: var(--shadow-soft);
+    padding: 25px;
+    margin: 25px auto;
+    max-width: 900px;
+    border: 1px solid var(--border-soft);
+}
+
+/* ===============================
+   FORMULAIRES
+   =============================== */
+form {
+    background: var(--bg-card);
+    padding: 30px;
+    border-radius: 20px;
+    max-width: 600px;
+    margin: 10px auto 30px;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--border-soft);
+    position: relative;
+    z-index: 10;
+
+}
+
+label {
+    font-weight: 500;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 12px 15px;
+    margin-top: 6px;
+    border-radius: 12px;
+    border: 1px solid var(--border-soft);
+    font-size: 1rem;
+    color: var(--text-main);
+    background-color: #ffffff;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #9c8a7a;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--accent-green);
+}
+
+/* ===============================
+           password
+   =============================== */
+.toggle-password {
+    display: block;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 18px;
+    z-index: 5;
+    opacity: 0.6;
+}
+
+.toggle-password:hover {
+    opacity: 1;
+}
+
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-wrapper input {
+    width: 100%;
+
+
+}
+
+.help {
+    display: block;
+    font-size: 12px;
+    color: #7a6a5a;
+    margin-top: 6px;
+}
+
+/* ===============================
+   Téléphone
+   =============================== */
+
+.phone-group {
+    display: flex;
+    gap: 8px;
+}
+
+.phone-group select {
+    width: 110px;
+    text-align: left;
+    margin: 0px;
+}
+
+.phone-group input {
+    flex: 1;
+}
+
+/* ===============================
+   BOUTONS
+   =============================== */
+button {
+    background: var(--accent-green);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    font-size: 1rem;
+    border-radius: 30px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+button.urgent {
+    background: var(--accent-heart);
+}
+
+/* ===============================
+   TABLES
+   =============================== */
+table {
+    width: 95%;
+    margin: 30px auto;
+    border-collapse: collapse;
+    background: var(--bg-card);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+}
+
+th,
+td {
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background: #EADBC8;
+    color: var(--text-main);
+}
+
+tr:nth-child(even) {
+    background: #FAF5EF;
+}
+
+table img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    /* չի ձգվում */
+    border-radius: 8px;
+    display: block;
+}
+
+/* ===============================
+   IMAGES
+   =============================== */
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 14px;
+}
+
+/* ===============================
+   QR
+   =============================== */
+
+.photos-cell {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+    justify-items: center;
+}
+
+.photos-cell img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+
+
+
+/* ===============================
+   PAGE PRODUIT
+   =============================== */
+.produit {
+    max-width: 900px;
+    margin: 40px auto;
+    background: var(--bg-card);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: var(--shadow-soft);
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.img-box img {
+    max-width: 280px;
+    border-radius: 14px;
+}
+
+.info-box {
+    flex: 1;
+}
+
+/* ===============================
+   PHOTOS ANIMAL – tailles propres
+   =============================== */
+
+.photos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.photos img {
+    width: 180px;
+    /* փոքր, մաքուր */
+    height: 180px;
+    object-fit: cover;
+    /* նկարը չի ձգվում */
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+
+
+
+/* Fenêtre de déconnexion */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0, 0, 0, 0.6);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 99999;
+
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+
+.modal.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    transform: scale(0.95);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+
+}
+
+
+.modal.show .modal-content {
+    transform: scale(1);
+}
+
+.modal-actions a,
+.modal-actions button {
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.modal-actions a:hover,
+.modal-actions button:hover {
+    transform: translateY(-1px);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    gap: 12px;
+}
+
+.confirmLogout {
+    background: #1b4332;
+    color: #fff;
+    padding: 8px 18px;
+    font-weight: 500;
+}
+
+.confirmLogout:hover {
+    background: #163b2a;
+}
+
+/* ===============================
+   FOOTER
+   =============================== */
+footer {
+    background: #EADBC8;
+    margin-top: 40px;
+    padding: 20 20px;
+    position: relative;
+    /* սա կարևոր է */
+    z-index: 1;
+
+}
+
+.footer-container {
+    max-width: 1000px;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+}
+
+footer a {
+    color: var(--text-main);
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+.footer-contact {
+    font-size: 14px;
+    color: var(--text-main);
+    line-height: 1.6;
+    text-align: right;
+}
+
+.footer-contact a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.footer-logo {
+    height: 80px;
+    /* սա perfect է footer-ի համար */
+    width: auto;
+    opacity: 0.85;
+}
+
+
+/* ===============================
+   Logo
+   =============================== */
+.logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.logo img {
+    height: 140px;
+    /* ↑ մեծացրու */
+    max-width: 160px;
+    /* թույլ չի տա քաշվել լայնքով */
+    object-fit: contain;
+    /* շատ կարևոր */
+    opacity: 0.95;
+
+}
+
+.logo img:hover {
+    opacity: 1;
+}
+
+/* ===============================
+   RESPONSIVE
+   =============================== */
+@media (max-width: 768px) {
+
+    header h1 {
+        font-size: 1.8rem;
+    }
+
+    nav ul {
+        gap: 10px;
+    }
+
+    form {
+        margin: 20px;
+    }
+
+    table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    th,
+    td {
+        font-size: 14px;
+        padding: 6px;
+        white-space: nowrap;
+    }
+
+    .produit {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
+    }
+
+    .footer-contact {
+        text-align: center;
+    }
+}
