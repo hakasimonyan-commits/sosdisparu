@@ -1,37 +1,18 @@
 <?php
-/* =========================================================
-   🔧 DEV — ՍԽԱԼՆԵՐԻ ՑՈՒՑԱԴՐՈՒՄ
-   (միայն ծրագրավորման ժամանակ)
-   ========================================================= */
+require 'db.php';
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
+session_start();
 
-/* =========================================================
-   🗄️ ՄԻԱՑՈՒՄ ԲԱԶԱՅԻՆ (MySQL)
-   ========================================================= */
-$pdo = new PDO(
-    "mysql:host=localhost;dbname=qr_animaux;charset=utf8mb4",
-    "root",
-    "root",
-    [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-    ]
-);
+require_once __DIR__ . '/vendor/autoload.php';
 
-/* =========================================================
-   🐾 QR-ից ստանում ենք կենդանու ID-ն
-   Օրինակ → view_animal.php?id=7
-   ========================================================= */
+
 if (!isset($_GET['id'])) {
     die("Animal introuvable");
 }
 
-$animal_id = (int)$_GET['id'];
+$animal_id = (int) $_GET['id'];
 
-/* =========================================================
-   📋 ԿԵՆԴԱՆՈՒ ՏՎՅԱԼՆԵՐԸ ԲԱԶԱՅԻՑ
-   ========================================================= */
 $stmt = $pdo->prepare("SELECT * FROM animals WHERE id = ?");
 $stmt->execute([$animal_id]);
 $animal = $stmt->fetch();
@@ -40,188 +21,53 @@ if (!$animal) {
     die("Animal introuvable");
 }
 
-/* =========================================================
-   📨 POST → GPS + MESSAGE + SMS (Twilio)
-   Երբ գտնողը սեղմում է «Գտել եմ կենդանուն»
-   ========================================================= */
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['alert'])) {
-
-    // 📍 Գեոլոկացիա
-    $lat = $_POST['lat'] ?? '';
-    $lng = $_POST['lng'] ?? '';
-
-    // 📞 Գտնողի հեռախոս (ոչ պարտադիր)
-    $finder_phone = trim($_POST['finder_phone'] ?? '');
-
-    // 💬 Գտնողի հաղորդագրություն
-    $finder_message = trim($_POST['finder_message'] ?? '');
-
-    /* =====================================================
-       📲 TWILIO ԿԱՐԳԱՎՈՐՈՒՄ
-       ===================================================== */
-    //utilisation des variables d'environnement
-
-    /* =====================================================
-       ✉️SMS ՏԵՔՍՏ — ՖՐԱՆՍԵՐԵՆ
-       ===================================================== */
-    $message  = "🐾 Bonne nouvelle !\n";
-    $message .= "Votre animal a été retrouvé.\n\n";
-
-    if ($finder_message !== '') {
-        $message .= "💬 Message du trouveur :\n$finder_message\n\n";
-    }
-
-    $message .= "📍 Localisation :\nhttps://maps.google.com/?q=$lat,$lng\n\n";
-
-    if ($finder_phone !== '') {
-        $message .= "📞 Téléphone du trouveur : $finder_phone\n";
-    } else {
-        $message .= "📞 Le trouveur n’a pas laissé de numéro\n";
-    }
-
-    /* =====================================================
-       SMS ՈՒՂԱՐԿՈՒՄ
-       ===================================================== */
-    $data = http_build_query([
-        'From' => $from,
-        'To'   => $to,
-        'Body' => $message
-    ]);
-
-    $ch = curl_init("https://api.twilio.com/2010-04-01/Accounts/$sid/Messages.json");
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_USERPWD, "$sid:$token");
-    curl_exec($ch);
-    curl_close($ch);
-
-    echo "OK";
-    exit;
-}
+$photos = json_decode($animal['photos'] ?? '[]', true);
 ?>
 
-<!DOCTYPE html>
-<html lang="fr">
+<?php include 'includes/header.php'; ?>
 
-<head>
-    <meta charset="UTF-8">
-    <title><?= htmlspecialchars($animal['name']) ?> – Animal retrouvé</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+<main class="container">
 
-<body>
+    <h1><?= htmlspecialchars($animal['name']) ?></h1>
+    <p><strong>Type :</strong> <?= htmlspecialchars($animal['type']) ?></p>
+    <p><strong>Race :</strong> <?= htmlspecialchars($animal['breed']) ?></p>
 
-    <?php include 'includes/header.php'; ?>
-
-    <main class="container">
-
-        <!-- 🐾 ԿԵՆԴԱՆՈՒ ՏՎՅԱԼՆԵՐ -->
-        <h1><?= htmlspecialchars($animal['name']) ?></h1>
-        <a class="btn call" href="tel:<?= htmlspecialchars($animal['owner_phone']) ?>">
-            📞 Contacter le propriétaire
-        </a>
-        <?php
-
-        if ($animal['type'] === 'chat') {
-            $icon = '🐱';
-            $label = 'Chat';
-        } else {
-            $icon = '🐶';
-            $label = 'Chien';
-        }
-        ?>
-        <p><strong>Type :</strong> <?= $icon ?> <?= $label ?></p>
-        <p><strong> Sex :</strong> <?= htmlspecialchars($animal['gender']) ?></p>
-        <p><strong>ID :</strong> <?= htmlspecialchars($animal['id_chip']) ?></p>
-        <p><strong>Santé :</strong> <?= htmlspecialchars($animal['health_issues'] ?: 'Aucun problème connu') ?></p>
-
-        <p style="color:red;">⚠️ Cet animal est déclaré perdu</p>
-
-        <!--  ԼՈՒՍԱՆԿԱՐՆԵՐ -->
+    <?php if ($photos): ?>
         <div class="photos">
-            <?php
-            $photos = json_decode($animal['photos'] ?? '', true);
-            if ($photos) {
-                foreach ($photos as $p) {
-                    echo "<img src='uploads/animals/$p' style='max-width:200px;margin:5px;'>";
-                }
-            }
-            ?>
+            <?php foreach ($photos as $photo): ?>
+                <img src="uploads/animals/<?= htmlspecialchars($photo) ?>" alt="animal">
+            <?php endforeach; ?>
         </div>
+    <?php endif; ?>
 
-        <!-- 📞 ԿՈՃԱԿՆԵՐ -->
-        <a class="btn call" href="tel:<?= htmlspecialchars($animal['owner_phone']) ?>">
-            📞 Appeler le propriétaire
-        </a><br><br>
+    <!-- 📍 Bouton principal -->
+    <button id="foundBtn" class="btn-found">
+        📍 J’ai trouvé cet animal
+    </button>
 
-        <a class="btn vet" target="_blank"
-            href="https://www.google.com/maps/search/vétérinaire+autour+de+moi/">
-            🏥 Vétérinaire à proximité
-        </a><br><br>
+    <!-- 📨 Formulaire caché -->
+    <form id="alertForm" method="POST" action="send_sms.php" style="display:none;">
+        <input type="hidden" name="animal_id" value="<?= $animal['id'] ?>">
+        <input type="hidden" name="lat" id="lat">
+        <input type="hidden" name="lng" id="lng">
 
-        <!--  ԳՏՆԵԼ ԵՄ -->
-        <button class="btn found" id="foundBtn">
-            📍 J’ai trouvé cet animal
-        </button>
 
-        <!-- 📨 ՀԱՂՈՐԴԱԳՐՈՒԹՅԱՆ ՁԵՎ -->
-        <div id="alertBox" style="display:none;margin-top:15px;">
-            <textarea id="finder_message"
-                placeholder="Décrivez où se trouve l’animal et son état"
-                rows="4" style="width:100%;"></textarea>
+        <textarea name="finder_message"
+            placeholder="Où se trouve l’animal ? État, détails…"></textarea>
 
-            <input type="tel" id="finder_phone" placeholder="Votre téléphone (facultatif)">
-            <br><br>
-            <button class="btn send" id="sendAlert">📨 Envoyer le message</button>
-        </div>
+        <input type="tel" name="finder_phone"
+            placeholder="Votre téléphone (facultatif)">
 
-    </main>
+        <button type="submit">📨 Envoyer le message</button>
+    </form>
 
-    <script>
-        let lat = '',
-            lng = '';
-        const foundBtn = document.getElementById('foundBtn');
-        const alertBox = document.getElementById('alertBox');
+    <a target="_blank"
+        href="https://www.google.com/maps/search/vétérinaire+autour+de+moi/"
+        class="vet-link">
+        🏥 Vétérinaire à proximité
+    </a>
 
-        foundBtn.onclick = function() {
+</main>
 
-            if (!navigator.geolocation) {
-                alert("❌ La géolocalisation n’est pas supportée");
-                return;
-            }
-
-            alert("📍 Récupération de la position…");
-
-            navigator.geolocation.getCurrentPosition(
-                function(pos) {
-                    lat = pos.coords.latitude;
-                    lng = pos.coords.longitude;
-                    alert("✅ Position obtenue");
-                    alertBox.style.display = 'block';
-                },
-                function(err) {
-                    alert("❌ Erreur GPS : " + err.message);
-                }
-            );
-        };
-
-        document.getElementById('sendAlert').onclick = () => {
-            fetch("", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    },
-                    body: "alert=1" +
-                        "&lat=" + lat +
-                        "&lng=" + lng +
-                        "&finder_phone=" + encodeURIComponent(document.getElementById('finder_phone').value) +
-                        "&finder_message=" + encodeURIComponent(document.getElementById('finder_message').value)
-                })
-                .then(() => alertBox.innerHTML = "✅ Message envoyé avec succès");
-        };
-    </script>
-
-</body>
-
-</html>
+<script src="/assets/view_animal.js"></script>
+<?php include 'includes/footer.php'; ?>
