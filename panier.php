@@ -1,19 +1,24 @@
 <?php
 require 'includes/auth.php';
+session_start();
 
-if (!isset($_SESSION['panier'])) {
-    $_SESSION['panier'] = [];
+$_SESSION['panier'] ??= [];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $_SESSION['panier'][] = [
+        'nom'  => trim($_POST['nom']),
+        'prix' => (float) $_POST['prix']
+    ];
 }
 
-$_SESSION['panier'][] = [
-    'nom' => $_POST['produit'],
-    'prix' => $_POST['prix']
-];
-
 $total = 0;
+
 foreach ($_SESSION['panier'] as $item) {
-    echo $item['nom'] . " - " . $item['prix'] . " €<br>";
+    echo htmlspecialchars($item['nom']) . " - "
+        . number_format($item['prix'], 2) . " €<br>";
     $total += $item['prix'];
 }
 
-echo "<br>Total HT : " . $total . " €";
+echo "<br><strong>Total HT : " . number_format($total, 2) . " €</strong>";
+
+include 'includes/footer.php';
