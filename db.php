@@ -1,10 +1,12 @@
 <?php
 // db.php - Ստեղծում ենք PDO կապը DB-ի հետ
 
-$host = 'localhost';
-$db   = 'qr_animaux';
-$user = 'root';    // MAMP default
-$pass = 'root';
+$env = parse_ini_file(__DIR__ . '/.env');
+
+$host = $env['DB_HOST'];
+$db   = $env['DB_NAME'];
+$user = $env['DB_USER'];
+$pass = $env['DB_PASS'];
 $charset = 'utf8mb4';
 
 
