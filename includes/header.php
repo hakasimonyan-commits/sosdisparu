@@ -19,11 +19,16 @@
                 <li><a href="index.php">Accueil</a></li>
 
                 <?php if (isset($_SESSION['user_id'])): ?>
+                    <li><a href="produits.php">Produits</a></li>
                     <li><a href="list_animal.php">Animaux</a></li>
                     <li><a href="#" id="logoutBtn">Déconnexion</a></li>
                 <?php else: ?>
                     <li><a href="register.php">Créer un compte</a></li>
                     <li><a href="login.php">Se connecter</a></li>
+
+
+
+
                 <?php endif; ?>
             </ul>
         </nav>

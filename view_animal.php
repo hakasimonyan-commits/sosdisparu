@@ -40,13 +40,15 @@ $photos = json_decode($animal['photos'] ?? '[]', true);
         </div>
     <?php endif; ?>
 
-    <!-- 📍 Bouton principal -->
-    <button id="foundBtn" class="btn-found">
+    <!--  Bouton principal -->
+    <button type="button" id="foundBtn" class="btn-found">
         📍 J’ai trouvé cet animal
     </button>
 
-    <!-- 📨 Formulaire caché -->
-    <form id="alertForm" method="POST" action="send_sms.php" style="display:none;">
+    <!--  Formulaire caché -->
+    <form id="alertForm" method="POST" action="actions/send_sms.php">
+
+        <input type="hidden" name="alert" value="1">
         <input type="hidden" name="animal_id" value="<?= $animal['id'] ?>">
         <input type="hidden" name="lat" id="lat">
         <input type="hidden" name="lng" id="lng">
@@ -69,5 +71,5 @@ $photos = json_decode($animal['photos'] ?? '[]', true);
 
 </main>
 
-<script src="/assets/view_animal.js"></script>
+<script src="./assets/view_animal.js"></script>
 <?php include 'includes/footer.php'; ?>

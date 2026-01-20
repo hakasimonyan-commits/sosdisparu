@@ -1,34 +1,31 @@
-document.addEventListener('DOMContentLoaded', function () {
-    console.log('JS READY');
+const foundBtn = document.getElementById("foundBtn");
+const form = document.getElementById("alertForm");
 
-    const btn = document.getElementById('foundBtn');
-    const form = document.getElementById('alertForm');
+let alreadyAsked = false;
 
-    console.log(btn, form);
+foundBtn.addEventListener("click", function (e) {
+    e.preventDefault();
 
-    if (!btn || !form) {
-        console.error('Button կամ Form չի գտնվել');
+    if (alreadyAsked) return;
+    alreadyAsked = true;
+
+    if (!navigator.geolocation) {
+        alert("La géolocalisation n'est pas supportée sur cet appareil.");
+        form.style.display = "block";
         return;
     }
 
-    btn.addEventListener('click', function () {
-        alert('Button clicked');
-
-        if (!navigator.geolocation) {
-            alert("GPS non supporté");
-            return;
+    navigator.geolocation.getCurrentPosition(
+        function (position) {
+            document.getElementById("lat").value = position.coords.latitude;
+            document.getElementById("lng").value = position.coords.longitude;
+            form.style.display = "block";
+        },
+        function () {
+            // ⬅️ ԱՀԱ ՍԱ Է ԿԱՐԵՎՈՐ ՓՈՓՈԽՈՒԹՅՈՒՆԸ
+            alert("Localisation indisponible. Vous pouvez continuer sans localisation.");
+            form.style.display = "block";
+            alreadyAsked = false;
         }
-
-        navigator.geolocation.getCurrentPosition(
-            function (pos) {
-                document.getElementById('lat').value = pos.coords.latitude;
-                document.getElementById('lng').value = pos.coords.longitude;
-                form.style.display = 'block';
-                btn.style.display = 'none';
-            },
-            function (err) {
-                alert(err.message);
-            }
-        );
-    });
+    );
 });

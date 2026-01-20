@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Géolocalisation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            background: #f4f4f4;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Demande de géolocalisation</h1>
+
+    <button onclick="getLocation()">Autoriser la géolocalisation</button>
+
+    <div id="result"></div>
+
+    <script>
+        console.log(navigator.geolocation)
+        function getLocation() {
+            if (!navigator.geolocation) {
+                console.log('OK')
+                document.getElementById("result").innerText =
+                    "La géolocalisation n'est pas supportée par ce navigateur.";
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    const longitude = position.coords.longitude;
+                    const latitude = position.coords.latitude;
+
+                    // Stockage UNIQUEMENT de la longitude
+                    localStorage.setItem("longitude", longitude);
+
+                    document.getElementById("result").innerHTML =
+                        "Latitude : " + latitude + "<br>" +
+                        "Longitude : " + longitude + "<br><br>" +
+                        "Longitude stockée dans localStorage ✅";
+                },
+                function (error) {
+                    document.getElementById("result").innerText =
+                        "Erreur ou refus de géolocalisation.";
+                }
+            );
+        }
+    </script>
+
+</body>
+
+</html>

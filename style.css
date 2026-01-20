@@ -513,8 +513,46 @@ img {
     background: #163b2a;
 }
 
+.animals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+
+/* UI fix */
+
+.animal-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.animal-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.animal-card h3 {
+    margin: 12px 0;
+    font-size: 18px;
+}
+
+.btn-secondary {
+    display: inline-block;
+    padding: 8px 16px;
+    background: #c89b6d;
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
 /* ===============================
-   FOOTER — REAL PREMIUM
+   FOOTER 
    =============================== */
 
 .site-footer {
@@ -531,7 +569,7 @@ img {
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: center;
-    border: 1px solid rgb(223, 19, 19);
+
 
 }
 
@@ -549,6 +587,7 @@ img {
     font-size: 13px;
     line-height: 1.45;
     opacity: 0.8;
+
 }
 
 /* Կոնտակտ = երկրորդական */
